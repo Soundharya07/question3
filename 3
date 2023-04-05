@@ -1,0 +1,10 @@
+FROM alpine:latest as builder
+RUN echo "<p> Hello World </p>" > /usr/share/nginx/html/index.html
+FROM nginx:latest
+COPY --from=builder /usr/share/nginx/html/index.html /usr/share/nginx/html/
+RUN echo "Starting nginx"
+CMD ["nginx", "-g", "daemon off;"]
+
+docker build -t my-nginx-image .
+
+docker run -p 80:80 my-nginx-image
